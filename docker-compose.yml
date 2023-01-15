@@ -1,0 +1,11 @@
+version: "2.2"
+
+services:
+    sdk:
+        build:
+            dockerfile: .docker/Dockerfile
+        user: "node"
+        working_dir: /opt/castellum/castellum-sdk
+        command: node index.js
+        volumes:
+            - ./:/opt/castellum/castellum-sdk
