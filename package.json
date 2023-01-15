@@ -3,7 +3,6 @@
 	"private": false,
 	"version": "0.0.1",
 	"type": "commonjs",
-	"main": "src/main.ts",
 	"scripts": {
 		"test": "mocha",
 		"format": "prettier --write ./",
