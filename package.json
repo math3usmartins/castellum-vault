@@ -1,13 +1,27 @@
 {
-	"name": "castellum-vault",
+	"name": "@castellum/vault-manager",
+	"description": "Castellum Vault Manager is a free & open source library to manage digital secrets, made for those who are tired of commercial solutions that fail in their mission to keep digital secrets safe.",
 	"private": false,
 	"license": "MIT",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"type": "commonjs",
+	"main": "dist/Vault/VaultManager.js",
+	"types": "./dist/Vault/VaultManager.d.ts",
+	"files": [
+		"dist/**/*.js",
+		"dist/**/*.d.ts",
+		"!dist/**/*.test.js",
+		"!dist/**/*.test.d.ts"
+	],
 	"scripts": {
+		"build": "rm -rf dist && tsc",
 		"test": "mocha && stryker run",
-		"format": "prettier --write ./",
-		"lint": "eslint --fix ./src"
+		"check": "npm run format-check && npm run lint-check",
+		"format-check": "prettier --check ./",
+		"format-fix": "prettier --write ./",
+		"lint-check": "eslint --fix-dry-run ./src",
+		"lint-fix": "eslint --fix ./src",
+		"prepublish": "npm run check && npm run test && npm run build"
 	},
 	"devDependencies": {
 		"@stryker-mutator/core": "^6.4.1",
@@ -26,5 +40,17 @@
 		"prettier": "2.8.4",
 		"ts-node": "^10.9.1",
 		"typescript": "^4.9.5"
-	}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/math3usmartins/castellum-vault.git"
+	},
+	"keywords": [
+		"secrets-manager"
+	],
+	"author": "Matheus Martins",
+	"bugs": {
+		"url": "https://github.com/math3usmartins/castellum-vault/issues"
+	},
+	"homepage": "https://github.com/math3usmartins/castellum-vault#readme"
 }

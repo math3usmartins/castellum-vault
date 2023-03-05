@@ -18,14 +18,14 @@ jobs:
             - name: checkout
               uses: actions/checkout@v3
 
-            - name: install
-              run: npm i
+            - name: install packages
+              run: npm i --no-save --ignore-scripts
 
             - name: run tests
               run: npm run test
 
-            - name: check format
-              run: npx prettier --check ./
+            - name: check formatting
+              run: npm run format-check
 
-            - name: check format
-              run: npx eslint --fix-dry-run ./
+            - name: check linting
+              run: npm run lint-check

@@ -1,8 +1,8 @@
-# Castellum Vault
+# Castellum Vault Manager
 
-Castellum Vault is a free & open source library to manage digital secrets, made
-for those who are tired of commercial solutions that fail in their mission to
-keep digital secrets safe.
+Castellum Vault Manager is a free & open source library to manage digital
+secrets, made for those who are tired of commercial solutions that fail in their
+mission to keep digital secrets safe.
 
 This is not a tool ready to be used, this is a building block, but it can be
 used for building secret management tools.
