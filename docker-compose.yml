@@ -1,11 +1,11 @@
 version: "2.2"
 
 services:
-    castellum-vault:
+    vault-manager:
         build:
             dockerfile: .docker/Dockerfile
         user: "node"
-        working_dir: /opt/castellum/castellum-vault
-        command: node index.js
+        working_dir: /opt/castellum/vault-manager
+        command: npm run build
         volumes:
-            - ./:/opt/castellum/castellum-vault
+            - ./:/opt/castellum/vault-manager
