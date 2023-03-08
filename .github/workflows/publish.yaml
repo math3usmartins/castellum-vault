@@ -4,6 +4,13 @@ on:
     push:
         branches:
             - main
+        paths:
+            - LICENSE
+            - README.md
+            - tsconfig.json
+            - package.json
+            - package-lock.json
+            - src/**/*.ts
 
 jobs:
     publish:
