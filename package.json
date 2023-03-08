@@ -3,7 +3,7 @@
 	"description": "Castellum Vault Manager is a free & open source library to manage digital secrets, made for those who are tired of commercial solutions that fail in their mission to keep digital secrets safe.",
 	"private": false,
 	"license": "MIT",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"type": "commonjs",
 	"main": "dist/Vault/VaultManager.js",
 	"types": "./dist/Vault/VaultManager.d.ts",
