@@ -29,4 +29,10 @@ export class InMemoryRepository implements VaultRepository {
 
 		return await Promise.resolve(vault)
 	}
+
+	public async findByAccount(accountId: AccountId): Promise<VaultId[]> {
+		const vaults = this.vaults.filter((vault: Vault) => vault.owner.value === accountId.value)
+
+		return await Promise.resolve(vaults.map((vault: Vault) => vault.id))
+	}
 }

@@ -58,4 +58,18 @@ describe("in memory vault repository", () => {
 
 		assert.equal(failed, true)
 	})
+
+	it("must find by account", async (): Promise<void> => {
+		const repository = new InMemoryRepository([])
+
+		const professionalAccountId = new AccountId("user-1")
+		await repository.create(professionalAccountId, "pro-vault")
+
+		const personalAccountId = new AccountId("user-2")
+		const personalVault = await repository.create(personalAccountId, "my-vault")
+
+		const result = await repository.findByAccount(personalAccountId)
+
+		assert.deepStrictEqual(result, [personalVault.id])
+	})
 })

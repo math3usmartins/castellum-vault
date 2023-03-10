@@ -31,4 +31,15 @@ describe("VaultManager", () => {
 		assert.equal(vault.owner.value, "user-1")
 		assert.deepStrictEqual(vault.secrets(), [secret])
 	})
+
+	it("must find vaults", async () => {
+		const repository = new InMemoryRepository([])
+		const manager = new VaultManager(account, repository)
+
+		const personalVault = await manager.create("my-vault")
+		const professionalVault = await manager.create("pro-vault")
+		const result = await manager.find()
+
+		assert.deepStrictEqual(result, [personalVault.id, professionalVault.id])
+	})
 })
