@@ -1,16 +1,9 @@
 name: publish
 
 on:
-    push:
-        branches:
-            - main
-        paths:
-            - LICENSE
-            - README.md
-            - tsconfig.json
-            - package.json
-            - package-lock.json
-            - src/**/*.ts
+    release:
+        types:
+            - published
 
 jobs:
     publish:
