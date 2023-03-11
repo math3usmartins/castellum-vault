@@ -2,13 +2,13 @@ import assert from "assert"
 import "mocha"
 import { SecretEntry } from "./SecretEntry"
 import { Revision } from "./SecretEntry/Revision"
-import { AccountId } from "../Account/AccountId"
+import { Author } from "../Author"
 
 describe("SecretEntry", (): void => {
 	const name = "some secret"
 	const createdAt = 1677630901
-	const initialAuthor = new AccountId("user-1")
-	const anotherAuthor = new AccountId("user-2")
+	const initialAuthor = new Author("user-1")
+	const anotherAuthor = new Author("user-2")
 	const initialEntry = new SecretEntry(initialAuthor, name, createdAt, "initial-value", [], null)
 
 	it("it must be created with given values", () => {
@@ -48,7 +48,7 @@ describe("SecretEntry", (): void => {
 		const updated = initialEntry.update("updated-value", updatedAt, anotherAuthor)
 
 		const archivedAt = 1677630903
-		const archivedBy = new AccountId("user-3")
+		const archivedBy = new Author("user-3")
 		const archived = updated.archive(archivedAt, archivedBy)
 
 		assert.equal(archived.name, name)
