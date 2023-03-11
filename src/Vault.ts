@@ -1,12 +1,13 @@
 import type { SecretEntry } from "./Vault/SecretEntry"
 import type { VaultId } from "./Vault/VaultId"
 import type { Author } from "./Author"
+import type { VaultName } from "./Vault/VaultName"
 
 export class Vault {
 	constructor(
 		readonly id: VaultId,
 		readonly owner: Author,
-		readonly name: string,
+		readonly name: VaultName,
 		readonly _secrets: SecretEntry[],
 	) {}
 

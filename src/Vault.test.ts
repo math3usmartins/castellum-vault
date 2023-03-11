@@ -4,6 +4,7 @@ import { SecretEntry } from "./Vault/SecretEntry"
 import { Vault } from "./Vault"
 import { VaultId } from "./Vault/VaultId"
 import { Author } from "./Author"
+import { VaultName } from "./Vault/VaultName"
 
 describe("Vault", (): void => {
 	const owner = new Author("user-1")
@@ -16,23 +17,23 @@ describe("Vault", (): void => {
 	const anotherEntry = new SecretEntry(anotherAuthor, "another secret", 1677630902, "another-value", [], null)
 
 	it("it must be created without secrets", (): void => {
-		const vault = new Vault(vaultId, owner, "my-vault", [])
+		const vault = new Vault(vaultId, owner, new VaultName("my-vault"), [])
 
 		assert.equal(vault.id.value, "VID-1")
-		assert.equal(vault.name, "my-vault")
+		assert.equal(vault.name.value, "my-vault")
 		assert.deepStrictEqual(vault.secrets(), [])
 	})
 
 	it("it must be created with given secret", (): void => {
-		const vault = new Vault(vaultId, owner, "my-vault", [initialEntry])
+		const vault = new Vault(vaultId, owner, new VaultName("my-vault"), [initialEntry])
 
 		assert.equal(vault.id.value, "VID-1")
-		assert.equal(vault.name, "my-vault")
+		assert.equal(vault.name.value, "my-vault")
 		assert.deepStrictEqual(vault.secrets(), [initialEntry])
 	})
 
 	it("it must update secret", () => {
-		const vault = new Vault(vaultId, owner, "my-vault", [initialEntry, anotherEntry])
+		const vault = new Vault(vaultId, owner, new VaultName("my-vault"), [initialEntry, anotherEntry])
 		const updatedAt = 1677630902
 
 		const updatedEntry = initialEntry.update("updated-value", updatedAt, anotherAuthor)
@@ -40,28 +41,28 @@ describe("Vault", (): void => {
 		const updatedVault = vault.put(updatedEntry)
 
 		assert.equal(updatedVault.id.value, "VID-1")
-		assert.equal(updatedVault.name, "my-vault")
+		assert.equal(updatedVault.name.value, "my-vault")
 		assert.equal(updatedVault.owner, owner)
 		assert.deepStrictEqual(updatedVault.secrets(), [updatedEntry, anotherEntry])
 	})
 
 	it("it must add new secret", (): void => {
-		const vault = new Vault(vaultId, owner, "my-vault", [initialEntry])
+		const vault = new Vault(vaultId, owner, new VaultName("my-vault"), [initialEntry])
 		const updatedVault = vault.put(anotherEntry)
 
 		assert.equal(updatedVault.id.value, "VID-1")
-		assert.equal(updatedVault.name, "my-vault")
+		assert.equal(updatedVault.name.value, "my-vault")
 		assert.deepStrictEqual(updatedVault.secrets(), [initialEntry, anotherEntry])
 	})
 
 	it("it must archive secret", (): void => {
-		const vault = new Vault(vaultId, owner, "my-vault", [initialEntry, anotherEntry])
+		const vault = new Vault(vaultId, owner, new VaultName("my-vault"), [initialEntry, anotherEntry])
 		const archivedAt = 1677630902
 
 		const updatedVault = vault.archive(initialEntryName, archivedAt, anotherAuthor)
 
 		assert.equal(updatedVault.id.value, "VID-1")
-		assert.equal(updatedVault.name, "my-vault")
+		assert.equal(updatedVault.name.value, "my-vault")
 		assert.equal(updatedVault.owner, owner)
 		assert.deepStrictEqual(updatedVault.secrets(), [initialEntry.archive(archivedAt, anotherAuthor), anotherEntry])
 	})

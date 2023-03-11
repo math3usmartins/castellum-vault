@@ -3,11 +3,12 @@ import { Vault } from "../../Vault"
 import { VaultId } from "../VaultId"
 import { VaultNotFoundError } from "./Error/VaultNotFoundError"
 import type { Author } from "../../Author"
+import type { VaultName } from "../VaultName"
 
 export class InMemoryRepository implements VaultRepository {
 	constructor(private vaults: Vault[]) {}
 
-	public async create(owner: Author, name: string): Promise<Vault> {
+	public async create(owner: Author, name: VaultName): Promise<Vault> {
 		const vaultCount = this.vaults.length + 1
 		const id = new VaultId(`VID-${vaultCount}`)
 
