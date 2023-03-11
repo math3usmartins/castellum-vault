@@ -1,12 +1,13 @@
 import type { SecretEntry } from "./Vault/SecretEntry"
-import type { AccountId } from "./Account/AccountId"
 import type { VaultId } from "./Vault/VaultId"
+import type { Author } from "./Author"
+import type { VaultName } from "./Vault/VaultName"
 
 export class Vault {
 	constructor(
 		readonly id: VaultId,
-		readonly owner: AccountId,
-		readonly name: string,
+		readonly owner: Author,
+		readonly name: VaultName,
 		readonly _secrets: SecretEntry[],
 	) {}
 
@@ -22,7 +23,7 @@ export class Vault {
 			: this.overwrite(secret, existingSecret)
 	}
 
-	public archive(name: string, archivedAt: number, author: AccountId): Vault {
+	public archive(name: string, archivedAt: number, author: Author): Vault {
 		const entries = this._secrets.map(
 			(entry: SecretEntry): SecretEntry => (entry.name === name ? entry.archive(archivedAt, author) : entry),
 		)

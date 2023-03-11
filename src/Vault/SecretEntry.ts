@@ -1,9 +1,9 @@
 import { Revision } from "./SecretEntry/Revision"
-import type { AccountId } from "../Account/AccountId"
+import type { Author } from "../Author"
 
 export class SecretEntry {
 	constructor(
-		readonly author: AccountId,
+		readonly author: Author,
 		readonly name: string,
 		readonly createdAt: number,
 		readonly value: string,
@@ -11,17 +11,17 @@ export class SecretEntry {
 		readonly archivedAt: number | null,
 	) {}
 
-	public static create(author: AccountId, createdAt: number, name: string, value: string): SecretEntry {
+	public static create(author: Author, createdAt: number, name: string, value: string): SecretEntry {
 		return new SecretEntry(author, name, createdAt, value, [], null)
 	}
 
-	public update(value: string, createdAt: number, author: AccountId): SecretEntry {
+	public update(value: string, createdAt: number, author: Author): SecretEntry {
 		const newRevision = new Revision(this.createdAt, this.value)
 
 		return new SecretEntry(author, this.name, createdAt, value, [...this._revisions, newRevision], null)
 	}
 
-	public archive(archivedAt: number, archivedBy: AccountId): SecretEntry {
+	public archive(archivedAt: number, archivedBy: Author): SecretEntry {
 		return new SecretEntry(archivedBy, this.name, this.createdAt, this.value, [...this._revisions], archivedAt)
 	}
 
