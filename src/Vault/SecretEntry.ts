@@ -16,7 +16,7 @@ export class SecretEntry {
 	}
 
 	public update(value: string, createdAt: number, author: Author): SecretEntry {
-		const newRevision = new Revision(this.createdAt, this.value)
+		const newRevision = new Revision(this.createdAt, this.value, this.author)
 
 		return new SecretEntry(author, this.name, createdAt, value, [...this._revisions, newRevision], null)
 	}

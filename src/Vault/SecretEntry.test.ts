@@ -28,7 +28,17 @@ describe("SecretEntry", (): void => {
 		assert.equal(updated.createdAt, updatedAt)
 		assert.equal(updated.value, "updated-value")
 		assert.equal(updated.archivedAt, null)
-		assert.deepStrictEqual(updated.revisions(), [new Revision(createdAt, "initial-value")])
+		assert.deepStrictEqual(updated.revisions(), [new Revision(createdAt, "initial-value", initialAuthor)])
+
+		const revision = updated.revisions()[0]
+
+		if (revision === undefined) {
+			assert.fail("Failed to get revision")
+		} else {
+			assert.equal(revision.createdAt, createdAt)
+			assert.equal(revision.value, "initial-value")
+			assert.deepStrictEqual(revision.author, initialAuthor)
+		}
 	})
 
 	it("it must be archived at given timestamp", (): void => {
@@ -56,6 +66,8 @@ describe("SecretEntry", (): void => {
 		assert.equal(archived.createdAt, updatedAt)
 		assert.equal(archived.value, "updated-value")
 		assert.equal(archived.archivedAt, archivedAt)
-		assert.deepStrictEqual(archived.revisions(), [new Revision(initialEntry.createdAt, initialEntry.value)])
+		assert.deepStrictEqual(archived.revisions(), [
+			new Revision(initialEntry.createdAt, initialEntry.value, initialAuthor),
+		])
 	})
 })
