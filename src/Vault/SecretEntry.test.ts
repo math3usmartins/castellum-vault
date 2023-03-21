@@ -28,7 +28,7 @@ describe("SecretEntry", (): void => {
 		assert.equal(updated.createdAt, updatedAt)
 		assert.equal(updated.value, "updated-value")
 		assert.equal(updated.archivedAt, null)
-		assert.deepStrictEqual(updated.revisions(), [new Revision(createdAt, "initial-value")])
+		assert.deepStrictEqual(updated.revisions(), [new Revision(createdAt, "initial-value", initialAuthor)])
 	})
 
 	it("it must be archived at given timestamp", (): void => {
@@ -56,6 +56,8 @@ describe("SecretEntry", (): void => {
 		assert.equal(archived.createdAt, updatedAt)
 		assert.equal(archived.value, "updated-value")
 		assert.equal(archived.archivedAt, archivedAt)
-		assert.deepStrictEqual(archived.revisions(), [new Revision(initialEntry.createdAt, initialEntry.value)])
+		assert.deepStrictEqual(archived.revisions(), [
+			new Revision(initialEntry.createdAt, initialEntry.value, initialAuthor),
+		])
 	})
 })
