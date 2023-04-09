@@ -7,8 +7,11 @@ import { VaultId } from "../VaultId"
 import { VaultNotFoundError } from "./Error/VaultNotFoundError"
 import { Author } from "../../Author"
 import { VaultName } from "../VaultName"
+import { WebLoginSecret } from "../SecretEntry/SecretValue/WebLoginSecret"
 
 describe("InMemoryRepository", () => {
+	const initialValue = new WebLoginSecret("initial url", "initial username", "initial value", "initial notes")
+
 	it("must create a vault with auto-generated ID", async () => {
 		const repository = new InMemoryRepository([])
 		const vault = await repository.create(new Author("user-1"), new VaultName("my-vault"))
@@ -23,7 +26,7 @@ describe("InMemoryRepository", () => {
 		const repository = new InMemoryRepository([])
 		let vault = await repository.create(new Author("user-1"), new VaultName("my-vault"))
 
-		const secret = SecretEntry.create(new Author("user-1"), 1677910538, "my-secret-entry", "my-secret-value")
+		const secret = SecretEntry.create(new Author("user-1"), 1677910538, "my-secret-entry", initialValue)
 		vault = vault.put(secret)
 
 		await repository.update(vault)
@@ -38,7 +41,7 @@ describe("InMemoryRepository", () => {
 		const professionalVault = await repository.create(new Author("user-1"), new VaultName("pro-vault"))
 
 		let personalVault = await repository.create(new Author("user-1"), new VaultName("my-vault"))
-		const secret = SecretEntry.create(new Author("user-1"), 1677910538, "my-secret-entry", "my-secret-value")
+		const secret = SecretEntry.create(new Author("user-1"), 1677910538, "my-secret-entry", initialValue)
 		personalVault = personalVault.put(secret)
 
 		await repository.update(personalVault)
