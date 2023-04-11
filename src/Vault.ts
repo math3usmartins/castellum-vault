@@ -15,12 +15,22 @@ export class Vault {
 		return [...this._secrets]
 	}
 
+	public getByName(name: string): SecretEntry {
+		const secret = this._secrets.find((s) => s.name === name)
+
+		if (secret === undefined) {
+			throw new Error(`No entry found with name "${name}"`)
+		}
+
+		return secret
+	}
+
 	public put(secret: SecretEntry): Vault {
 		const existingSecret = this._secrets.find((s: SecretEntry): boolean => s.name === secret.name)
 
 		return existingSecret === undefined
 			? new Vault(this.id, this.owner, this.name, [...this._secrets, secret])
-			: this.overwrite(secret, existingSecret)
+			: this.updateEntry(secret, existingSecret)
 	}
 
 	public archive(name: string, archivedAt: number, author: Author): Vault {
@@ -31,8 +41,8 @@ export class Vault {
 		return new Vault(this.id, this.owner, this.name, entries)
 	}
 
-	private overwrite(newEntry: SecretEntry, existingEntry: SecretEntry): Vault {
-		const updatedSecret = existingEntry.update(newEntry.value, newEntry.createdAt, newEntry.author)
+	private updateEntry(newEntry: SecretEntry, existingEntry: SecretEntry): Vault {
+		const updatedSecret = existingEntry.merge(newEntry)
 
 		const secrets = this._secrets.map(
 			(s: SecretEntry): SecretEntry => (s.name === newEntry.name ? updatedSecret : s),
