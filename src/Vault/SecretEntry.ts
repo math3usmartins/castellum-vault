@@ -3,7 +3,7 @@ import type { Author } from "../Author"
 import type { SecretValue } from "./SecretEntry/SecretValue"
 
 export class SecretEntry {
-	private constructor(readonly name: string, readonly revision: string, readonly _revisions: Revision[]) {}
+	private constructor(readonly name: string, readonly revision: string, private readonly _revisions: Revision[]) {}
 
 	public static create(name: string, author: Author, createdAt: number, value: SecretValue): SecretEntry {
 		const revision = Revision.create(createdAt, value, author)
