@@ -3,30 +3,55 @@ import type { Author } from "../Author"
 import type { SecretValue } from "./SecretEntry/SecretValue"
 
 export class SecretEntry {
-	constructor(
-		readonly author: Author,
-		readonly name: string,
-		readonly createdAt: number,
-		readonly value: SecretValue,
-		readonly _revisions: Revision[],
-		readonly archivedAt: number | null,
-	) {}
+	private constructor(readonly name: string, readonly revision: string, readonly _revisions: Revision[]) {}
 
-	public static create(author: Author, createdAt: number, name: string, value: SecretValue): SecretEntry {
-		return new SecretEntry(author, name, createdAt, value, [], null)
+	public static create(name: string, author: Author, createdAt: number, value: SecretValue): SecretEntry {
+		const revision = Revision.create(createdAt, value, author)
+
+		return new SecretEntry(name, revision.id, [revision])
 	}
 
 	public update(value: SecretValue, createdAt: number, author: Author): SecretEntry {
-		const newRevision = new Revision(this.createdAt, this.value, this.author)
+		const newRevision = Revision.create(createdAt, value, author)
 
-		return new SecretEntry(author, this.name, createdAt, value, [...this._revisions, newRevision], null)
+		return new SecretEntry(this.name, newRevision.id, [...this._revisions, newRevision])
 	}
 
 	public archive(archivedAt: number, archivedBy: Author): SecretEntry {
-		return new SecretEntry(archivedBy, this.name, this.createdAt, this.value, [...this._revisions], archivedAt)
+		const archived = this.current().archive(archivedBy, archivedAt)
+
+		return new SecretEntry(this.name, archived.id, [...this._revisions, archived])
 	}
 
 	public revisions(): Revision[] {
 		return [...this._revisions]
+	}
+
+	public merge(anotherEntry: SecretEntry): SecretEntry {
+		const intersection = this.revisions().filter(
+			(rev) => anotherEntry.revisions().find((anotherRev) => anotherRev.id === rev.id) !== undefined,
+		)
+
+		const previousOnly = this.revisions().filter(
+			(rev) => anotherEntry.revisions().find((anotherRev) => anotherRev.id === rev.id) === undefined,
+		)
+
+		const newOnly = anotherEntry
+			.revisions()
+			.filter((anotherRev) => this.revisions().find((thisRev) => thisRev.id === anotherRev.id) === undefined)
+
+		const revisions = [...intersection, ...previousOnly, ...newOnly]
+
+		return new SecretEntry(this.name, anotherEntry.revision, revisions)
+	}
+
+	public current(): Revision {
+		const revision = this._revisions.find((rev) => rev.id === this.revision)
+
+		if (revision === undefined) {
+			throw new Error(`Current revision not found: ${this.revision}`)
+		}
+
+		return revision
 	}
 }

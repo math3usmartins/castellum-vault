@@ -26,7 +26,7 @@ describe("InMemoryRepository", () => {
 		const repository = new InMemoryRepository([])
 		let vault = await repository.create(new Author("user-1"), new VaultName("my-vault"))
 
-		const secret = SecretEntry.create(new Author("user-1"), 1677910538, "my-secret-entry", initialValue)
+		const secret = SecretEntry.create("my-secret-entry", new Author("user-1"), 1677910538, initialValue)
 		vault = vault.put(secret)
 
 		await repository.update(vault)
@@ -41,7 +41,7 @@ describe("InMemoryRepository", () => {
 		const professionalVault = await repository.create(new Author("user-1"), new VaultName("pro-vault"))
 
 		let personalVault = await repository.create(new Author("user-1"), new VaultName("my-vault"))
-		const secret = SecretEntry.create(new Author("user-1"), 1677910538, "my-secret-entry", initialValue)
+		const secret = SecretEntry.create("my-secret-entry", new Author("user-1"), 1677910538, initialValue)
 		personalVault = personalVault.put(secret)
 
 		await repository.update(personalVault)

@@ -13,11 +13,11 @@ describe("Vault", (): void => {
 	const initialEntryName = "some secret"
 	const initialEntryCreatedAt = 1677630901
 	const initialValue = new WebLoginSecret("initial url", "initial username", "initial value", "initial notes")
-	const initialEntry = new SecretEntry(owner, initialEntryName, initialEntryCreatedAt, initialValue, [], null)
+	const initialEntry = SecretEntry.create(initialEntryName, owner, initialEntryCreatedAt, initialValue)
 
 	const anotherAuthor = new Author("user-2")
 	const updatedValue = new WebLoginSecret("updated url", "updated username", "updated value", "updated notes")
-	const anotherEntry = new SecretEntry(anotherAuthor, "another secret", 1677630902, updatedValue, [], null)
+	const anotherEntry = SecretEntry.create("another secret", anotherAuthor, 1677630902, updatedValue)
 
 	it("it must be created without secrets", (): void => {
 		const vault = new Vault(vaultId, owner, new VaultName("my-vault"), [])
@@ -35,10 +35,24 @@ describe("Vault", (): void => {
 		assert.deepStrictEqual(vault.secrets(), [initialEntry])
 	})
 
+	it("it must throw error when entry not found", (): void => {
+		const vault = new Vault(vaultId, owner, new VaultName("my-vault"), [])
+
+		assert.throws(() => {
+			vault.getByName("bad-name")
+		}, new Error('No entry found with name "bad-name"'))
+	})
+
+	it("it must get entry by name", (): void => {
+		const vault = new Vault(vaultId, owner, new VaultName("my-vault"), [initialEntry, anotherEntry])
+		const entry = vault.getByName(anotherEntry.name)
+
+		assert.deepStrictEqual(entry, anotherEntry)
+	})
+
 	it("it must update secret", () => {
 		const vault = new Vault(vaultId, owner, new VaultName("my-vault"), [initialEntry, anotherEntry])
 		const updatedAt = 1677630902
-
 		const updatedEntry = initialEntry.update(updatedValue, updatedAt, anotherAuthor)
 
 		const updatedVault = vault.put(updatedEntry)
@@ -67,6 +81,8 @@ describe("Vault", (): void => {
 		assert.equal(updatedVault.id.value, "VID-1")
 		assert.equal(updatedVault.name.value, "my-vault")
 		assert.equal(updatedVault.owner, owner)
-		assert.deepStrictEqual(updatedVault.secrets(), [initialEntry.archive(archivedAt, anotherAuthor), anotherEntry])
+		assert.deepStrictEqual(updatedVault.secrets(), [updatedVault.getByName(initialEntryName), anotherEntry])
+
+		assert.equal(updatedVault.getByName(initialEntryName).current().archived, true)
 	})
 })
