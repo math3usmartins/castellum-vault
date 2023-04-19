@@ -2,7 +2,7 @@
 	"name": "@castellum/vault",
 	"private": false,
 	"license": "MIT",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"type": "commonjs",
 	"main": "dist/Vault.js",
 	"types": "./dist/Vault.d.ts",
